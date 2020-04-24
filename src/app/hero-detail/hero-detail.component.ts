@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { HeroService } from '../hero.service';
 import { Hero } from '../hero';
@@ -15,6 +16,7 @@ export class HeroDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute, // holds parameter information of URL
     private heroService: HeroService, // gets hero data from the remote server & this component will use it to get the hero-to-display
+    private location: Location, // service for interacting with the browser; to navigate back to the view that navigated here
   ) { }
 
   ngOnInit(): void {
@@ -30,5 +32,9 @@ export class HeroDetailComponent implements OnInit {
 
     this.heroService.getHero(id)
       .subscribe(hero => this.hero = hero);
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }
