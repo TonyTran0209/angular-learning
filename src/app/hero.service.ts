@@ -18,6 +18,12 @@ export class HeroService {
   // and collectionName is the heroes data object in the in-memory-data-service.ts.
   private heroesUrl = 'api/heroes';  // URL to web api
 
+  // The heroes web API expects a special header in HTTP save requests. 
+  // That header is in the httpOptions constant defined in the HeroService.
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+
   constructor(
     private http: HttpClient,
     private messageService: MessageService
@@ -72,4 +78,13 @@ export class HeroService {
         catchError(this.handleError<Hero>(`getHero id=${id}`))
       );
   }
+
+  /** PUT: update the hero on the server */
+  updateHero(hero: Hero): Observable<any> {
+    return this.http.put(this.heroesUrl, hero, this.httpOptions).pipe(
+      tap(_ => this.log(`updated hero id=${hero.id}`)),
+      catchError(this.handleError<any>('updateHero'))
+    );
+  }
+
 }
